@@ -41,7 +41,7 @@ class Model_Insert_Admin extends Model_Insert_Base
 		static $this_plugin;
 
 		if ( empty( $this_plugin ) ) 
-			$this_plugin = 'prosper-insert/prosperinsert.php';
+			$this_plugin = 'prosperinsert/prosperinsert.php';
 
 		if ( $file == $this_plugin ) 
 		{
