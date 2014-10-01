@@ -30,16 +30,6 @@ abstract class Model_Insert_Base
 	
 		if ($this->_options['Api_Key'] && strlen($this->_options['Api_Key']) == 32)
 		{ 				
-			if (isset($this->_options['Enable_Caching']) &&  (!file_exists(PROSPERINSERT_CACHE) || substr(decoct( fileperms(PROSPERINSERT_CACHE) ), 1) <= 0755))
-			{
-				shell_exec('mkdir ' . PROSPERINSERT_CACHE);
-
-				if ((!file_exists(PROSPERINSERT_CACHE) || substr(decoct( fileperms(PROSPERINSERT_CACHE) ), 1) <= 0755))
-				{
-					add_action( 'admin_notices', array($this, 'prosperNoticeWrite' ));
-				}
-			}
-
 			add_action('wp_enqueue_scripts', array($this, 'prosperStylesheets'));	
 			require_once(PROSPERINSERT_INCLUDE . '/ProsperInsertController.php');
 		}
@@ -106,15 +96,6 @@ abstract class Model_Insert_Base
 			echo _e('<span style="font-size:14px; padding-left:10px;">Go to the Prosperent Suite <a href="' . $url . '">General Settings</a> and follow the directions to get your API Key.</span>', 'my-text-domain' );
 			echo '</div>';		
 		}
-	}
-	
-	public function prosperNoticeWrite() 
-	{
-		echo '<div class="error" style="padding:6px 0;">';
-		echo _e( '<span style="font-size:14px; padding-left:10px;">The plugin was <strong>unable</strong> to create the <strong>prosperent_cache</strong> directory inside <strong>wp-content</strong>.</span><br><br>', 'my-text-domain' );
-		echo _e( '<span style="font-size:14px; padding-left:10px;">Please create the <strong>prosperent_cache</strong> directory inside your <strong>wp-content</strong> directory and make it writable (0777).</span><br>', 'my-text-domain' );
-		echo _e( '<span style="font-size:14px; padding-left:10px;">If you need assistance, <a href="http://codex.wordpress.org/Changing_File_Permissions">Changing File Permissions</a></span>', 'my-text-domain');
-		echo '</div>';	
 	}
 	
 	/**
@@ -200,7 +181,7 @@ abstract class Model_Insert_Base
 		ob_start();
 	}
 	
-	public function apiCall ($settings, $fetch, $lifetime = PROSPERINSERT_CACHE_PRODS)
+	public function apiCall ($settings, $fetch)
 	{	
 		if (empty($this->_options))
 		{
@@ -286,15 +267,10 @@ abstract class Model_Insert_Base
 			throw new Exception(implode('; ', $response['errors']));
 		}
 
-		/*if ($options['Enable_Caching'] && file_exists(PROSPERINSERT_CACHE) && substr(decoct( fileperms(PROSPERINSERT_CACHE) ), 1) >= 0755)
-		{
-			$settings = array_merge($settings, $this->apiCaching($lifetime));	
-		}*/		
-		
 		return array('results' => $response['data'], 'totalAvailable' => $response['totalRecordsAvailable'], 'total' => $response['totalRecordsFound'], 'facets' => $response['facets']);
 	}
 	
-	public function trendsApiCall ($settings, $fetch, $categories = array(), $merchants = array(), $lifetime = PROSPERINSERT_CACHE_COUPS)
+	public function trendsApiCall ($settings, $fetch, $categories = array(), $merchants = array())
 	{
 		if (empty($this->_options))
 		{
@@ -411,18 +387,5 @@ abstract class Model_Insert_Base
 		$results = $this->apiCall($settings, $fetch, $lifetime);
 
 		return $results;
-	}
-	
-	public function apiCaching($lifetime)
-	{
-		$cache = array(
-			'cacheBackend'  => 'FILE',
-			'cacheOptions'  => array(
-				'cache_dir' => PROSPERINSERT_CACHE,
-				'lifetime'	=> $lifetime
-			)
-		);	
-		
-		return $cache;
 	}
 }

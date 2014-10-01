@@ -2,7 +2,7 @@
 /*
 Plugin Name: ProsperInsert
 Description: Easily place products within pages and posts.
-Version: 1.0
+Version: 1.1
 Author: Prosperent Brandon
 Author URI: http://prosperent.com
 Plugin URI: http://community.prosperent.com/forumdisplay.php?35-Wordpress-Plugin-Suite

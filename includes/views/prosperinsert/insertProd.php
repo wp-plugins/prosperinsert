@@ -42,6 +42,10 @@ if ($pieces['v'] === 'grid')
 					{
 						echo '<div class="couponExpire"><span><a href=' . $goToUrl . '>Expires Soon!</a></span></div>';
 					}
+				}				
+				else
+				{
+					echo '<div class="promo">&nbsp;</div>';
 				}
 				?>
                 <div class="prodContent">
@@ -88,11 +92,10 @@ else
 					if ($record['promo'])
 					{					
 						echo '<div class="promo"><span>' . $record['promo'] . '</span></div>' . (($record['expiration_date'] || $record['expirationDate']) ? '&nbsp;&nbsp;&mdash;&nbsp;&nbsp;' : '');
-					}
-					
-					if($record['expiration_date'] || $record['expirationDate'])
+					}					
+					elseif($record['expiration_date'] || $record['expirationDate'])
 					{
-						$expirationDate = $record['expirationDate'] ? $record['expirationDate'] : $$record['expiration_date'];
+						$expirationDate = $record['expirationDate'] ? $record['expirationDate'] : $record['expiration_date'];
 						$expires = strtotime($expirationDate);
 						$today = strtotime(date("Y-m-d"));
 						$interval = ($expires - $today) / (60*60*24);
@@ -109,7 +112,7 @@ else
 						{
 							echo '<div class="couponExpire"><span>Expires Soon!</span></div>';
 						}
-					}	
+					}					
 					?>
 					<div class="productTitle"><a href=<?php echo $goToUrl; ?>><span><?php echo $record['keyword']; ?></span></a></div>
 					<?php
@@ -144,7 +147,7 @@ else
 						}
 						if($record['merchant'])
 						{
-							echo '<span class="merchantIn"><u>Merchant</u>: <a href="' . $goToUrl . '"><cite>' . $record['merchant'] . '</cite></a></span>';
+							echo '<span class="merchantIn"><u>Merchant</u>: <a href=' . $goToUrl . '><cite>' . $record['merchant'] . '</cite></a></span>';
 						}				
 						?>
 					</div>
